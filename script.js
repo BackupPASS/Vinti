@@ -299,6 +299,19 @@ function processFinalTranscript() {
 }
 
 
+
 // Event listener for popup close button
 document.getElementById('close-popup').addEventListener('click', closePopup);
 });
+
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                console.log('Microphone access granted:', stream);
+                // Use the stream here (e.g., for audio recording)
+            } catch (error) {
+                console.error('Microphone access denied:', error);
+            }
+        });
+
