@@ -146,7 +146,9 @@ setTimeout(function() {
     "tell me about yourself": "I'm an AI designed to assist and provide information.",
 "tell me a joke": "Why don't skeletons fight each other? They don't have the guts!",
 "tell me a riddle": "I speak without a mouth and hear without ears. I have no body, but I come alive with the wind. What am I?",
+"Who did you vote for": "Thanks for asking! I can't physically vote however I would have voted for the Monster Raving Looney Party",
 "Code 240324": "Hmmm... You shoudn't know that shhhhh!!!!!",
+"Your stupid": "You well funny, its not nice trying to hurt someones feelings, it doesnt make you funny or a man/woman it makes you a bully. If you continue to violate our terms you may be banned fom Vinti (not limted to other PlingifyPlug or our other services).",
 };
 
 function getAIResponse(userInput) {
