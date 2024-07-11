@@ -317,3 +317,17 @@ document.getElementById('close-popup').addEventListener('click', closePopup);
             }
         });
 
+
+        
+
+// script.js
+document.addEventListener("DOMContentLoaded", function() {
+  // Set a timeout to hide the loading screen after 5 seconds
+  setTimeout(function() {
+    document.body.classList.add('loaded');
+  }, 5000); // 5 seconds delay
+});
+
+
+
+
