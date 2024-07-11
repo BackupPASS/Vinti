@@ -50,7 +50,10 @@ setTimeout(function() {
 
   setTimeout(showCookieNotice, 1000);
 
-  document.cookie = "username=JohnDoe; path=/; secure; HttpOnly";
+  document.cookie = "username=JohnDoe; path=/; 'sessionCookie=value; secure; HttpOnly";
+
+
+
 
   document.addEventListener('DOMContentLoaded', function() {
     // Get elements
@@ -307,15 +310,7 @@ document.getElementById('close-popup').addEventListener('click', closePopup);
 });
 
 
-        document.addEventListener('DOMContentLoaded', async () => {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                console.log('Microphone access granted:', stream);
-                // Use the stream here (e.g., for audio recording)
-            } catch (error) {
-                console.error('Microphone access denied:', error);
-            }
-        });
+ 
 
 
         
