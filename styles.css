@@ -46,7 +46,7 @@ body {
 .content {
   background-color: #fff;
   padding: 28px;
-  border-radius: 20px;
+  border-radius: 30px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   margin-top: 32px;
   padding-bottom: 50px;
@@ -96,7 +96,7 @@ body {
   left: 0;
   width: 100%;
   transition: height 0.3s ease-in-out;
-  border-radius: 15px 15px 0 0;
+  border-radius: 25px 25px 0 0;
   overflow: hidden;
   backdrop-filter: blur(2px) saturate(200%);
   -webkit-backdrop-filter: blur(2px) saturate(200%);
