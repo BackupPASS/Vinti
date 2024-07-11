@@ -529,7 +529,7 @@ textarea#chat-input:focus {
 
 .pl__ring--d {
   animation-name: ringD;
-  stroke: #f42582;
+  stroke: #0a5376;
 }
 
 /* Animations */
