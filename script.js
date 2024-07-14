@@ -325,3 +325,26 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 
+document.addEventListener('DOMContentLoaded', function() {
+  // Define the specific code you are looking for (auth token)
+  const specificCode = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
+  
+  fetch('https://backuppass.github.io/Vinti1.00.00Auth/')
+      .then(response => response.text())
+      .then(data => {
+          // Check if the specific code is present in the fetched data
+          if (data.includes(specificCode)) {
+              // Code is present, display the normal content
+              document.getElementById('content').style.display = 'block';
+          } else {
+              // Code is not present, redirect to the test site
+              window.location.href = 'https://backuppass.github.io/VintiTest/';
+          }
+      })
+      .catch(error => {
+          console.error('Error fetching the URL:', error);
+          // In case of error, you can choose to handle it as needed
+          // For example, you might want to redirect or show an error message
+      });
+});
+
