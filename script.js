@@ -320,9 +320,8 @@ document.addEventListener("DOMContentLoaded", function() {
   // Set a timeout to hide the loading screen after 5 seconds
   setTimeout(function() {
     document.body.classList.add('loaded');
-  }, 2300); // 5 seconds delay
+  }, 1300); // 5 seconds delay
 });
-
 
 
 
