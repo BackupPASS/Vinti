@@ -476,7 +476,8 @@ textarea#chat-input:focus {
   padding: 20px;
   border-radius: 10px;
   width: 80%;
-  max-width: 400px;
+  max-width: 80%;
+  max-height: 95%;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   animation: fadeIn 0.3s ease-in-out;
 }
@@ -733,7 +734,7 @@ body.loaded #loading-screen {
 
 
 h1.zoom {
-  animation: zoomInOut 5s ease-in-out infinite;
+  animation: zoomInOut 7s ease-in-out infinite;
 }
 
 @keyframes zoomInOut {
@@ -744,5 +745,4 @@ h1.zoom {
       transform: scale(1.1); /* Zoom in less (120% of original size) */
   }
 }
-
 
