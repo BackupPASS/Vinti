@@ -338,7 +338,7 @@ document.addEventListener('DOMContentLoaded', function() {
               document.getElementById('content').style.display = 'block';
           } else {
               // Code is not present, redirect to the test site
-              window.location.href = 'https://backuppass.github.io/VintiTest/';
+              window.location.href = 'https://backuppass.github.io/Vinti-No-Server/';
           }
       })
       .catch(error => {
