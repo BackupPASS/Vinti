@@ -1,15 +1,95 @@
 body {
-  font-family: Arial, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   margin: 0;
   padding: 0;
   background-color: #f4f4f4;
+  transition: background-color 0.3s ease;
+}
+
+
+
+body.dark-mode #background-slideshow {
+  opacity: 10%;
+}
+
+body.dark-mode .headertxt {
+  color: #414141;
+}
+
+body.dark-mode a {
+  color: #ffffff;
+}
+body.dark-mode {
+  background-color: #212121;
+  color: #e0e0e0;
+}
+body.dark-mode .searchbar {
+  background-color: #424242;
+  border-color: #616161;
+  color: #e0e0e0;
+}
+body.dark-mode .searchbar:hover {
+  box-shadow: 0 1px 6px rgba(255, 255, 255, 0.28);
+  border-color: rgba(128, 128, 128, 0);
+}
+body.dark-mode .searchbar-input {
+  color: #e0e0e0;
+}
+body.dark-mode .content {
+  background-color: #303030;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+body.dark-mode .btn {
+  background-color: rgba(45, 45, 45, 0.23);
+  color: #e0e0e0;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+body.dark-mode .btn:hover {
+  background-color: rgba(255, 255, 255, 0.23);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+body.dark-mode .footer {
+  background-color: rgba(61, 61, 61, 0.712);
+  color: #e0e0e0;
+}
+body.dark-mode .footer a {
+  color: #e0e0e0;
+}
+body.dark-mode .settings-menu {
+  background-color: rgba(40, 40, 40, 0.9);
+}
+body.dark-mode .settings-content {
+  background-color: #424242;
+}
+body.dark-mode .settings-btn {
+  background-color: #424242;
+}
+body.dark-mode .settings-btn {
+  background-color: #616161;
+  color: #fff;
+}
+body.dark-mode #loading-screen {
+  background: #212121;
+}
+body.dark-mode .cookie-card {
+  background-color: #303030;
+  box-shadow: 20px 20px 30px rgba(255, 255, 255, .05);
+}
+body.dark-mode .cookie-card .title{
+  color: #e0e0e0;
+}
+body.dark-mode .cookie-card .description{
+  color: #9e9e9e;
+}
+
+body.dark-mode .headertxt {
+  color: #e0e0e0;
 }
 
 @font-face {
   font-family: 'Alba';
   src: url('ALBA____.TTF') format('truetype');
 }
-
 @font-face {
   font-family: 'Albas';
   src: url('ALBAS___.TTF') format('truetype');
@@ -22,14 +102,6 @@ body {
   text-align: center;
   margin-top: 5%;
   transition: all 0.3s ease;
-}
-
-.header {
-  background-color: #000;
-  color: #fff;
-  text-align: center;
-  padding: 20px 0;
-  border-radius: 0 0 15px 15px;
 }
 
 .headertxt {
@@ -50,6 +122,7 @@ body {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   margin-top: 32px;
   padding-bottom: 50px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .btn {
@@ -74,15 +147,6 @@ body {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.search-box {
-  margin-top: 20px;
-  text-align: center;
-  border-radius: 15px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  padding-bottom: 150px;
-  background-color: #fff;
-}
-
 .mainlinks {
   text-align: center;
   margin-top: 20px;
@@ -102,6 +166,7 @@ body {
   backdrop-filter: blur(2px) saturate(200%);
   -webkit-backdrop-filter: blur(2px) saturate(200%);
   background-color: rgba(255, 255, 255, 0.23);
+  transition: background-color 0.3s ease;
 }
 
 .footer a {
@@ -123,6 +188,7 @@ body {
   margin: 0 auto;
   width: auto;
   max-width: 90%;
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .searchbar:hover {
@@ -223,7 +289,7 @@ body {
 }
 
 a {
-  color: white;
+  color: rgb(0, 0, 0);
   text-decoration: none;
 }
 
@@ -236,7 +302,6 @@ a:hover {
 }
 
 @media screen and (max-width: 600px) {
-
   .searchbar {
     font-size: 8px;
     font-family: arial, sans-serif;
@@ -252,18 +317,15 @@ a:hover {
     width: auto;
     max-width: 70%;
   }
-  
   .searchbar:hover {
     box-shadow: 0 1px 6px rgb(32 33 36 / 28%);
     border-color: rgba(223,225,229,0);
   }
-  
   .searchbar-wrapper {
     flex: 1;
     display: flex;
     padding: 5px 8px 0 14px;
   }
-  
   .searchbar-left {
     font-size: 14px;
     font-family: arial, sans-serif;
@@ -273,11 +335,9 @@ a:hover {
     padding-right: 13px;
     margin-top: -5px;
   }
-  
   .search-icon-wrapper {
     margin: auto;
   }
-  
   .search-icon {
     margin-top: 3px;
     color: #9aa0a6;
@@ -285,7 +345,6 @@ a:hover {
     line-height: 20px;
     width: 20px;
   }
-  
   .searchbar-icon {
     display: inline-block;
     fill: currentColor;
@@ -294,13 +353,11 @@ a:hover {
     position: relative;
     width: 24px;
   }
-  
   .searchbar-center {
     display: flex;
     flex: 1;
     flex-wrap: wrap;
   }
-  
   .searchbar-input-spacer {
     color: transparent;
     flex: 100%;
@@ -308,7 +365,6 @@ a:hover {
     height: 34px;
     font-size: 16px;
   }
-  
   .searchbar-input {
     background-color: transparent;
     border: none;
@@ -325,7 +381,6 @@ a:hover {
     max-width: 100%;
     width: 100%;
   }
-  
   .searchbar-right {
     display: flex;
     flex: 0 0 auto;
@@ -333,11 +388,9 @@ a:hover {
     align-items: stretch;
     flex-direction: row
   }
-  
   .searchbar-clear-icon {
     margin-right: 12px
   }
-  
   .voice-search {
     flex: 1 0 auto;
     display: flex;
@@ -349,7 +402,6 @@ a:hover {
     padding: 0 8px;
     width: 2.8em;
   }
-
   .container {
     max-width: 90%;
     padding: 20px;
@@ -380,8 +432,10 @@ a:hover {
   background-size: cover;
   background-position: center;
   transition: opacity 1s ease-in-out;
+  opacity: 85%;
 }
 
+/* Cookie Card */
 .cookie-card {
   max-width: 320px;
   padding: 1rem;
@@ -451,469 +505,305 @@ a:hover {
 }
 
 body {
-  font-family: Arial, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
-.pulsate-border {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none; /* Prevent interaction with elements beneath */
-  z-index: -1; /* Ensure it's behind all other content */
-  animation: fadeIn 1s forwards, fadeOut 1s forwards 2s;
-}
-
-.pulsate-border::before, .pulsate-border::after {
-  content: "";
+/* Settings Button and Menu styles */
+.settings-button {
   position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 30px;
+  height: 25px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1001;
+  transition: transform 0.3s ease;
+}
+
+.settings-button .bar {
+  width: 100%;
+  height: 3px;
+  background-color: #fff;
+  border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.settings-button.open .bar:nth-child(1) {
+  transform: translateY(10px) rotate(45deg);
+}
+
+.settings-button.open .bar:nth-child(2) {
+  opacity: 0;
+}
+
+.settings-button.open .bar:nth-child(3) {
+  transform: translateY(-10px) rotate(-45deg);
+}
+
+/*Settings menu Style*/
+.settings-menu {
+  display: none; /* Hidden by default */
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  border: 20px solid transparent;
-  border-image: linear-gradient(45deg, rgba(21, 185, 226, 0.5), rgba(12, 97, 224, 0.5), rgba(139, 16, 221, 0.5), rgba(212, 0, 255, 0.5));
-  border-image-slice: 1;
-  animation: pulsate 3s infinite;
-  filter: blur(10px); /* Apply a blur effect */
-  box-sizing: border-box;
-}
-
-@keyframes pulsate {
-  0%, 100% {
-    border-image: linear-gradient(45deg, rgba(21, 185, 226, 0.5), rgba(12, 97, 224, 0.5), rgba(139, 16, 221, 0.5), rgba(212, 0, 255, 0.5));
-    border-image-slice: 1;
-  }
-  50% {
-    border-image: linear-gradient(45deg, rgba(212, 0, 255, 0.7), rgba(139, 16, 221, 0.7), rgba(12, 97, 224, 0.7), rgba(21, 185, 226, 0.7));
-    border-image-slice: 1;
-  }
-}
-
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-@keyframes fadeOut {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-.pulsate-border.active::before, .pulsate-border.active::after {
-  animation: pulsate 3s infinite, fadeIn 1s forwards;
-}
-
-.pulsate-border.inactive::before, .pulsate-border.inactive::after {
-  animation: fadeOut 1s forwards;
-}
-
-
-
-.chat-container {
-  
-  position: fixed;
-  bottom: 80px;
-  left: 20px;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  align-items: flex-start;
-  z-index: 1000; /* Ensure it is on top of other content */
-}
-
-.chat-box {
-  height: auto;
-  width: auto;
-  border-radius: 16px;
- background-color: #fff;
-margin: 15;
-  max-width: 300px;
-  margin-bottom: 10px;
-  font-size: 14px;
-  line-height: 1.4;
-  color: #333;
-  animation: fadeIn 0.3s ease;
-}
-
-.chat-box p {
-  margin: 0;
-}
-
-.siri-ball {
-  width: 60px;
-  height: 60px;
-  position: relative;
-  border-radius: 50%;
-  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+  z-index: 1000;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  animation: fadeIn 0.3s ease;
-  background: radial-gradient(circle at 20% 30%, rgb(0, 255, 255), transparent 80%),
-    radial-gradient(circle at 80% 70%, blue, transparent 80%),
-    radial-gradient(circle at 40% 60%, rgb(77, 11, 107), transparent 40%);
-  filter: blur(3px);
-  transition: transform 0.1s ease-in-out, width 0.1s ease-in-out, height 0.1s ease-in-out;
+  transition: opacity 0.3s ease;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+.settings-menu.open {
+  display: flex;
 }
 
-@keyframes siriGlow {
-  from {
-    box-shadow: 0 0 20px rgba(0, 122, 255, 0.6);
-  }
-  to {
-    box-shadow: 0 0 40px rgba(0, 122, 255, 1);
-  }
-}
-
-.siri-ball.active {
-  box-shadow: 0 0 40px rgba(0, 122, 255, 1);
-  transform: scale(1.2); /* Example: Increase size when active */
-}
-
-.siri-ball.spin {
-  animation: spin 1s infinite linear;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.siri-ball.active::before {
-  box-shadow: 0 0 40px rgba(0, 122, 255, 1);
-}
-
-textarea#chat-input {
-  width: 95%;
-  height: 95%;
-  padding: 3px;
-  border-radius: 16px;
+.settings-content {
   background-color: #fff;
-  border: 0.5px solid #e0e0e0;
-  font-size: 12px;
-  line-height: 1.4;
-  margin-top: 5px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  resize: none;
-}
-
-textarea#chat-input:focus {
-  outline: none;
-  border-color: #007aff;
-  box-shadow: 0 0 8px rgba(0, 122, 255, 0.6);
-}
-
-.popup {
-  display: none; /* Initially hidden */
-  position: fixed;
-  z-index: 1000; /* Above other elements */
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-}
-
-.popup-content {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: #fff;
-  padding: 20px;
-  border-radius: 10px;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  margin-top: 20px;
   width: 80%;
-  max-width: 80%;
-  max-height: 95%;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  animation: fadeIn 0.3s ease-in-out;
+  height: 80%;
+  transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
-.popup-content h2 {
+.settings-title {
+text-align: left;
+border-bottom: 1px solid #e0e0e0;
+padding-bottom: 15px;
+font-size: 22px;
   margin-top: 0;
-  font-size: 24px;
-  text-align: center;
+  margin-bottom: 20px;
 }
-
-.popup-content p {
-  font-size: 16px;
-  text-align: center;
+.settings-btn {
+    background-color: #eee;
+    border: none;
+    padding: 15px 10px;
+    margin: 5px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 95%;
+    max-width: 200px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
-
-.close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 20px;
-  cursor: pointer;
+.settings-btn:hover {
+  background-color: #ddd;
+  transform: scale(1.05);
 }
-
-
-
+.darkModeButton {
+  font-weight: 600;
+}
 
 
 .pl {
-  width: 10em;
-  height: 10em;
+width: 10em;
+height: 10em;
 }
 
 .pl__ring {
-  animation: ringA 2s linear infinite;
+animation: ringA 2s linear infinite;
 }
 
 .pl__ring--a {
-  stroke: #f42f25;
+stroke: #f42f25;
 }
 
 .pl__ring--b {
-  animation-name: ringB;
-  stroke: #f49725;
+animation-name: ringB;
+stroke: #f49725;
 }
 
 .pl__ring--c {
-  animation-name: ringC;
-  stroke: #255ff4;
+animation-name: ringC;
+stroke: #255ff4;
 }
 
 .pl__ring--d {
-  animation-name: ringD;
-  stroke: #0a5376;
+animation-name: ringD;
+stroke: #0a5376;
 }
 
 /* Animations */
 @keyframes ringA {
-  from, 4% {
-    stroke-dasharray: 0 660;
-    stroke-width: 20;
-    stroke-dashoffset: -330;
-  }
+from, 4% {
+  stroke-dasharray: 0 660;
+  stroke-width: 20;
+  stroke-dashoffset: -330;
+}
 
-  12% {
-    stroke-dasharray: 60 600;
-    stroke-width: 30;
-    stroke-dashoffset: -335;
-  }
+12% {
+  stroke-dasharray: 60 600;
+  stroke-width: 30;
+  stroke-dashoffset: -335;
+}
 
-  32% {
-    stroke-dasharray: 60 600;
-    stroke-width: 30;
-    stroke-dashoffset: -595;
-  }
+32% {
+  stroke-dasharray: 60 600;
+  stroke-width: 30;
+  stroke-dashoffset: -595;
+}
 
-  40%, 54% {
-    stroke-dasharray: 0 660;
-    stroke-width: 20;
-    stroke-dashoffset: -660;
-  }
+40%, 54% {
+  stroke-dasharray: 0 660;
+  stroke-width: 20;
+  stroke-dashoffset: -660;
+}
 
-  62% {
-    stroke-dasharray: 60 600;
-    stroke-width: 30;
-    stroke-dashoffset: -665;
-  }
+62% {
+  stroke-dasharray: 60 600;
+  stroke-width: 30;
+  stroke-dashoffset: -665;
+}
 
-  82% {
-    stroke-dasharray: 60 600;
-    stroke-width: 30;
-    stroke-dashoffset: -925;
-  }
+82% {
+  stroke-dasharray: 60 600;
+  stroke-width: 30;
+  stroke-dashoffset: -925;
+}
 
-  90%, to {
-    stroke-dasharray: 0 660;
-    stroke-width: 20;
-    stroke-dashoffset: -990;
-  }
+90%, to {
+  stroke-dasharray: 0 660;
+  stroke-width: 20;
+  stroke-dashoffset: -990;
+}
 }
 
 @keyframes ringB {
-  from, 12% {
-    stroke-dasharray: 0 220;
-    stroke-width: 20;
-    stroke-dashoffset: -110;
-  }
+from, 12% {
+  stroke-dasharray: 0 220;
+  stroke-width: 20;
+  stroke-dashoffset: -110;
+}
 
-  20% {
-    stroke-dasharray: 20 200;
-    stroke-width: 30;
-    stroke-dashoffset: -115;
-  }
+20% {
+  stroke-dasharray: 20 200;
+  stroke-width: 30;
+  stroke-dashoffset: -115;
+}
 
-  40% {
-    stroke-dasharray: 20 200;
-    stroke-width: 30;
-    stroke-dashoffset: -195;
-  }
+40% {
+  stroke-dasharray: 20 200;
+  stroke-width: 30;
+  stroke-dashoffset: -195;
+}
 
-  48%, 62% {
-    stroke-dasharray: 0 220;
-    stroke-width: 20;
-    stroke-dashoffset: -220;
-  }
+48%, 62% {
+  stroke-dasharray: 0 220;
+  stroke-width: 20;
+  stroke-dashoffset: -220;
+}
 
-  70% {
-    stroke-dasharray: 20 200;
-    stroke-width: 30;
-    stroke-dashoffset: -225;
-  }
+70% {
+  stroke-dasharray: 20 200;
+  stroke-width: 30;
+  stroke-dashoffset: -225;
+}
 
-  90% {
-    stroke-dasharray: 20 200;
-    stroke-width: 30;
-    stroke-dashoffset: -305;
-  }
+90% {
+  stroke-dasharray: 20 200;
+  stroke-width: 30;
+  stroke-dashoffset: -305;
+}
 
-  98%, to {
-    stroke-dasharray: 0 220;
-    stroke-width: 20;
-    stroke-dashoffset: -330;
-  }
+98%, to {
+  stroke-dasharray: 0 220;
+  stroke-width: 20;
+  stroke-dashoffset: -330;
+}
 }
 
 @keyframes ringC {
-  from {
-    stroke-dasharray: 0 440;
-    stroke-width: 20;
-    stroke-dashoffset: 0;
-  }
-
-  8% {
-    stroke-dasharray: 40 400;
-    stroke-width: 30;
-    stroke-dashoffset: -5;
-  }
-
-  28% {
-    stroke-dasharray: 40 400;
-    stroke-width: 30;
-    stroke-dashoffset: -175;
-  }
-
-  36%, 58% {
-    stroke-dasharray: 0 440;
-    stroke-width: 20;
-    stroke-dashoffset: -220;
-  }
-
-  66% {
-    stroke-dasharray: 40 400;
-    stroke-width: 30;
-    stroke-dashoffset: -225;
-  }
-
-  86% {
-    stroke-dasharray: 40 400;
-    stroke-width: 30;
-    stroke-dashoffset: -395;
-  }
-
-  94%, to {
-    stroke-dasharray: 0 440;
-    stroke-width: 20;
-    stroke-dashoffset: -440;
-  }
+from {
+  stroke-dasharray: 0 440;
+  stroke-width: 20;
+  stroke-dashoffset: 0;
 }
 
-@keyframes ringD {
-  from, 8% {
-    stroke-dasharray: 0 440;
-    stroke-width: 20;
-    stroke-dashoffset: 0;
-  }
+8% {
+  stroke-dasharray: 40 400;
+  stroke-width: 30;
+  stroke-dashoffset: -5;
+}
 
-  16% {
-    stroke-dasharray: 40 400;
-    stroke-width: 30;
-    stroke-dashoffset: -5;
-  }
+28% {
+  stroke-dasharray: 40 400;
+  stroke-width: 30;
+  stroke-dashoffset: -175;
+}
 
-  36% {
-    stroke-dasharray: 40 400;
-    stroke-width: 30;
-    stroke-dashoffset: -175;
-  }
+36%, 58% {
+  stroke-dasharray: 0 440;
+  stroke-width: 20;
+  stroke-dashoffset: -220;
+}
 
-  44%, 50% {
-    stroke-dasharray: 0 440;
-    stroke-width: 20;
-    stroke-dashoffset: -220;
-  }
+66% {
+  stroke-dasharray: 40 400;
+  stroke-width: 30;
+  stroke-dashoffset: -225;
+}
 
-  58% {
-    stroke-dasharray: 40 400;
-    stroke-width: 30;
-    stroke-dashoffset: -225;
-  }
+86% {
+  stroke-dasharray: 40 400;
+  stroke-width: 30;
+  stroke-dashoffset: -395;
+}
 
-  78% {
-    stroke-dasharray: 40 400;
-    stroke-width: 30;
-    stroke-dashoffset: -395;
-  }
-
-  86%, to {
-    stroke-dasharray: 0 440;
-    stroke-width: 20;
-    stroke-dashoffset: -440;
-  }
+ 
+94%, to {
+  stroke-dasharray: 0 440;
+  stroke-width: 20;
+  stroke-dashoffset: -440;
+}
 }
 
 
 #loading-screen {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  opacity: 1; /* Initially visible */
-  visibility: visible;
-  transition: opacity 1s ease-in-out, visibility 1s ease-in-out; /* Add visibility transition */
-  z-index: 9999; /* Ensure the loading screen is on top */
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: #fff;
+display: flex;
+justify-content: center;
+align-items: center;
+opacity: 1; /* Initially visible */
+visibility: visible;
+transition: opacity 1s ease-in-out, visibility 1s ease-in-out; /* Add visibility transition */
+z-index: 9999; /* Ensure the loading screen is on top */
 }
 
 body.loaded #loading-screen {
-  opacity: 0; /* Fade out effect */
-  visibility: hidden; /* Ensure it's not interactive after fading out */
+opacity: 0; /* Fade out effect */
+visibility: hidden; /* Ensure it's not interactive after fading out */
 }
 
 
 h1.zoom {
-  animation: zoomInOut 7s ease-in-out infinite;
+animation: zoomInOut 7s ease-in-out infinite;
 }
 
 @keyframes zoomInOut {
-  0%, 20%, 100% {
-      transform: scale(1);
-  }
-  10% {
-      transform: scale(1.1); /* Zoom in less (120% of original size) */
-  }
+0%, 20%, 100% {
+    transform: scale(1);
 }
-
+10% {
+    transform: scale(1.1); /* Zoom in less (120% of original size) */
+}
+}
