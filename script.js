@@ -82,34 +82,3 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
-// Get the settings button and menu elements
-const settingsButton = document.getElementById('settingsButton');
-const settingsMenu = document.getElementById('settingsMenu');
-
-
-// Initially close the settings menu
-settingsMenu.style.display = 'none';
-
-
-
-// Add event listener to toggle settings menu
-settingsButton.addEventListener('click', () => {
-    if (settingsMenu.style.display === 'none') {
-        settingsMenu.style.display = 'flex';
-        settingsButton.classList.add('open')
-
-    } else {
-        settingsMenu.style.display = 'none';
-         settingsButton.classList.remove('open')
-    }
-});
-
-// Add event listener to the dark mode button
-const darkModeButton = document.querySelector('.darkModeButton');
-
-darkModeButton.addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode');
-    // Save dark mode preference to local storage
-    const isDarkMode = document.body.classList.contains('dark-mode');
-    localStorage.setItem('darkMode', isDarkMode);
-});
