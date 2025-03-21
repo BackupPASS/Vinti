@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // Set a timeout to hide the loading screen after 1.3 seconds
     setTimeout(function() {
         document.body.classList.add('loaded');
-    }, 1300);
+    }, .900);
 
     // Check for saved dark mode preference
     const savedDarkMode = localStorage.getItem('darkMode');
