@@ -1,5 +1,4 @@
 
-
 setTimeout(function() {
   showCookieNotice();
 }, 1000);
