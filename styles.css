@@ -5,9 +5,6 @@ body {
   background-color: #f4f4f4;
   color: #000; /* Default text color */
   transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
-  background-image: url('image2.jpg');
-  background-size: cover;
-  background-repeat: no-repeat;
 }
 
 /* Dark Mode Styles (applied when the system prefers dark mode) */
@@ -666,3 +663,7 @@ animation: zoomInOut 7s ease-in-out infinite;
     transform: scale(1.1); /* Zoom in less (120% of original size) */
 }
 }
+
+
+
+  
