@@ -1,22 +1,4 @@
-let currentIndex = 0;
-const images = [
-    'image2.jpg',
-];
-const slideshow = document.getElementById('background-slideshow');
 
-function changeBackground(index) {
-    slideshow.style.backgroundImage = `url(${images[index]})`;
-    currentIndex = index;
-}
-
-function nextBackground() {
-    currentIndex = (currentIndex + 1) % images.length;
-    changeBackground(currentIndex);
-}
-
-changeBackground(0);
-
-setInterval(nextBackground, 5000);
 
 setTimeout(function() {
   showCookieNotice();
