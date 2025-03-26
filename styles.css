@@ -5,6 +5,14 @@ body {
   background-color: #f4f4f4;
   color: #000; /* Default text color */
   transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
+  
+  /* Prevent scrolling */
+  position: fixed; /* Fixes the body in place */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* Disables scrolling */
 }
 
 /* Dark Mode Styles (applied when the system prefers dark mode) */
