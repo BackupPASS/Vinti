@@ -458,18 +458,30 @@ body {
   }
   
   /* Cookie Card */
-  .cookie-card {
-    max-width: 320px;
-    padding: 1rem;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 20px 20px 30px rgba(0, 0, 0, .05);
-    display: none; /* Hide initially */
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 9999;
-  }
+.cookie-card {
+  max-width: 320px;
+  padding: 1rem;
+  
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: saturate(180%) blur(30px);
+  -webkit-backdrop-filter: saturate(180%) blur(30px);
+  
+  border-radius: 15px;
+  
+  box-shadow:
+    0 8px 32px 0 rgba(31, 38, 135, 0.37),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+  
+  display: none; /* Hide initially */
+  
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  
+  z-index: 9999;
+  
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
   
   .title {
     font-weight: 600;
