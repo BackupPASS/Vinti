@@ -45,22 +45,18 @@ setTimeout(showCookieNotice, 1000);
 document.cookie = "username=JohnDoe; path=/; 'sessionCookie=value; secure; HttpOnly";
 
 document.addEventListener('DOMContentLoaded', function() {
-  // Get elements
   const showPopup = document.getElementById('showPopup');
   const popup = document.getElementById('iosPopup');
   const closeBtn = document.querySelector('.popup .close');
 
-  // Show popup when the text is clicked
   showPopup.addEventListener('click', function() {
     popup.style.display = 'block';
   });
 
-  // Hide popup when the close button is clicked
   closeBtn.addEventListener('click', function() {
     popup.style.display = 'none';
   });
 
-  // Hide popup when clicking outside the popup content
   window.addEventListener('click', function(event) {
     if (event.target == popup) {
       popup.style.display = 'none';
@@ -70,15 +66,46 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 document.addEventListener("DOMContentLoaded", function() {
-    // Set a timeout to hide the loading screen after 1.3 seconds
     setTimeout(function() {
         document.body.classList.add('loaded');
     }, .900);
 
-    // Check for saved dark mode preference
     const savedDarkMode = localStorage.getItem('darkMode');
     if (savedDarkMode === 'true') {
         document.body.classList.add('dark-mode');
     }
 });
+
+async function checkVintiStatus() {
+  try {
+
+    const res = await fetch("https://backuppass.github.io/Status-Centre/");
+    const html = await res.text();
+
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+
+    const tagline = doc.querySelector(".status-row .tagline") || doc.querySelector(".tagline");
+
+    if (!tagline) return;
+
+    const text = tagline.textContent || "";
+
+    const match = text.match(/This app is\s+([A-Za-z]+)/i);
+    const status = match ? match[1].toLowerCase() : "unknown";
+
+    console.log("Vinti status:", status);
+
+    if (status === "offline" || status === "downtime" || status === "error") {
+      window.location.href = "https://backuppass.github.io/Vinti-No-Server/";
+    }
+
+  } catch (err) {
+    console.error("Status check failed:", err);
+  }
+}
+
+checkVintiStatus();
+
+setInterval(checkVintiStatus, 30000);
 
