@@ -78,25 +78,36 @@ document.addEventListener("DOMContentLoaded", function() {
 
 async function checkVintiStatus() {
   try {
-
     const res = await fetch("https://backuppass.github.io/Status-Centre/");
     const html = await res.text();
 
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, "text/html");
 
-    const tagline = doc.querySelector(".status-row .tagline") || doc.querySelector(".tagline");
+    const vintiCard = Array.from(doc.querySelectorAll(".card.col-12"))
+      .find(card => card.querySelector("h2")?.textContent.trim() === "Vinti");
 
-    if (!tagline) return;
+    if (!vintiCard) {
+      console.warn("Vinti card not found.");
+      return;
+    }
 
-    const text = tagline.textContent || "";
+    const statusRow = vintiCard.querySelector(".status-row");
+    if (!statusRow) {
+      console.warn("Status row not found inside Vinti card.");
+      return;
+    }
 
-    const match = text.match(/This app is\s+([A-Za-z]+)/i);
-    const status = match ? match[1].toLowerCase() : "unknown";
+    const pill = statusRow.querySelector(".pill");
+    if (!pill) {
+      console.warn("No status pill found inside Vinti section.");
+      return;
+    }
 
+    const status = pill.textContent.trim().toLowerCase();
     console.log("Vinti status:", status);
 
-    if (status === "offline" || status === "downtime" || status === "error") {
+    if (["offline", "downtime", "error"].includes(status)) {
       window.location.href = "https://backuppass.github.io/Vinti-No-Server/";
     }
 
@@ -106,6 +117,7 @@ async function checkVintiStatus() {
 }
 
 checkVintiStatus();
-
 setInterval(checkVintiStatus, 30000);
+
+
 
