@@ -18,6 +18,12 @@ changeBackground(0);
 
 setInterval(nextBackground, 5000);
 
+document.addEventListener("DOMContentLoaded", function() {
+    setTimeout(function() {
+        document.body.classList.add('loaded');
+    }, .900);
+});
+
 async function checkVintiStatus() {
   try {
     const res = await fetch("https://backuppass.github.io/Status-Centre/");
@@ -107,14 +113,3 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-
-document.addEventListener("DOMContentLoaded", function() {
-    setTimeout(function() {
-        document.body.classList.add('loaded');
-    }, .900);
-
-    const savedDarkMode = localStorage.getItem('darkMode');
-    if (savedDarkMode === 'true') {
-        document.body.classList.add('dark-mode');
-    }
-});
