@@ -85,7 +85,6 @@ body {
   
 .content {
   position: relative;
-  /* existing styles */
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: saturate(180%) blur(30px);
   -webkit-backdrop-filter: saturate(180%) blur(30px);
@@ -96,10 +95,9 @@ body {
   padding: 28px 28px 50px 28px;
   margin-top: 32px;
   overflow: hidden;
-  filter: url(#wavyRefraction); /* optional if you want the waves */
+  filter: url(#wavyRefraction); 
 }
 
-/* Shiny highlight shimmer */
 .content::before {
   content: "";
   position: absolute;
@@ -121,7 +119,6 @@ body {
   animation-delay: 2s;
 }
 
-/* The shimmer animation: fade in and slide across */
 @keyframes shimmer {
   0% {
     opacity: 0;
@@ -137,12 +134,9 @@ body {
   }
 }
 
-
-
-  
   .btn {
     display: inline-block;
-    background: rgba(40, 40, 40, 0.35); /* Darker semi-transparent background */
+    background: rgba(40, 40, 40, 0.35); 
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -174,7 +168,7 @@ body {
  .footer {
   color: #fff;
   text-align: center;
-  padding: 8px 0; /* a bit more padding for comfort */
+  padding: 8px 0; 
   position: fixed;
   bottom: 0;
   left: 0;
@@ -198,7 +192,6 @@ body {
   text-decoration: none;
 }
 
-  
   .searchbar {
     font-size: 14px;
     font-family: arial, sans-serif;
@@ -461,93 +454,71 @@ body {
     opacity: 85%;
   }
   
-.cookie-card {
-  max-width: 320px;
-  padding: 1rem;
-  
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: saturate(180%) blur(30px);
-  -webkit-backdrop-filter: saturate(180%) blur(30px);
-  
-  border-radius: 15px;
-  
-  box-shadow:
-    0 8px 32px 0 rgba(31, 38, 135, 0.37),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.18);
-  
-  display: none; /* Hide initially */
-  
+     .btn.ghost{background:transparent}
+    .btn.ghost:hover{background: rgba(255,255,255,.06)}
+
+    .cookie-card {
+  max-width: 340px;
+  padding: 0.9rem 1.1rem;
+  background: rgba(0, 0, 0, 0.188);             
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 14px;                          
+  box-shadow: var(--shadow);
+  display: none;
   position: fixed;
   bottom: 20px;
   right: 20px;
-  
   z-index: 9999;
-  
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.10);  
 }
 
-  
-  .title {
-    font-weight: 600;
-    color: rgb(31 41 55);
-  }
-  
-  .description {
-    margin-top: 1rem;
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-    color: rgb(75 85 99);
-  }
-  
-  .description a {
-    color: rgb(59 130 246);
-  }
-  
-  .description a:hover {
-    text-decoration: underline;
-  }
-  
-  .actions {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 1rem;
-  }
-  
-  .pref {
-    font-size: 0.75rem;
-    line-height: 1rem;
-    color: rgb(31 41 55);
-    text-decoration: underline;
-    border: none;
-    background-color: transparent;
-  }
-  
-  .pref:hover {
-    color: rgb(156 163 175);
-  }
-  
-  .accept {
-    font-size: 0.75rem;
-    line-height: 1rem;
-    background-color: rgb(17 24 39);
-    font-weight: 500;
-    border-radius: 0.5rem;
-    color: #fff;
-    padding: 0.625rem 1rem;
-    border: none;
-  }
-  
-  .accept:hover {
-    background-color: rgb(55 65 81);
-  }
+.cookie-card .title {
+  font-weight: 600;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.cookie-card .description {
+  margin-top: 0.75rem;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.cookie-card .description a {
+  color: var(--pri);
+}
+
+.cookie-card .description a:hover {
+  text-decoration: underline;
+}
+
+.cookie-card .actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.75rem;
+  gap: 8px;
+}
+
+.cookie-card .accept {
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 10px;
+  padding: 0.45rem 0.95rem;
+  cursor: pointer;
+  background: #00000016;                             
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.cookie-card .accept:hover {
+  background: #1a1a1a;
+}
   
   body {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
-  
-  
-  
   
   .pl {
   width: 10em;
@@ -577,7 +548,6 @@ body {
   stroke: #0a5376;
   }
   
-  /* Animations */
   @keyframes ringA {
   from, 4% {
     stroke-dasharray: 0 660;
