@@ -455,7 +455,7 @@ body {
   }
   
      .btn.ghost{background:transparent}
-    .btn.ghost:hover{background: rgba(255,255,255,.06)}
+    .btn.ghost:hover{background: rgba(255,255,255,.06), color: #adadad;}
 
     .cookie-card {
   max-width: 340px;
@@ -720,3 +720,4 @@ body {
   
   
     
+
