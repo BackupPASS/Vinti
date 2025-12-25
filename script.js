@@ -87,8 +87,6 @@ function acceptCookies() {
   document.cookie = 'cookieAccepted=true; max-age=31536000'; 
 }
 
-document.getElementById('accept-cookies').addEventListener('click', acceptCookies);
-
 setTimeout(showCookieNotice, 1000);
 
 document.cookie = "username=JohnDoe; path=/; 'sessionCookie=value; secure; HttpOnly";
@@ -112,6 +110,81 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 });
+
+function getLocation() {
+  navigator.geolocation.getCurrentPosition(pos => {
+    const lat = pos.coords.latitude;
+    const lon = pos.coords.longitude;
+
+    getCity(lat, lon);
+    getWeather(lat, lon);
+  }, () => {
+    document.getElementById("weather-location").innerText = "Location blocked";
+  });
+}
+
+function getCity(lat, lon) {
+  fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`)
+    .then(res => res.json())
+    .then(data => {
+      const city =
+        data.address.town ||
+        data.address.city ||
+        data.address.village ||
+        data.address.county;
+
+      document.getElementById("weather-location").innerText = city;
+    });
+}
+
+function getWeather(lat, lon) {
+  fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&alerts=true`)
+    .then(res => res.json())
+    .then(data => {
+      const weather = data.current_weather;
+
+      document.getElementById("weather-temp").innerText =
+        `${weather.temperature}°C`;
+
+      document.getElementById("weather-wind").innerText =
+        `Wind: ${weather.windspeed} km/h`;
+
+      document.getElementById("weather-condition").innerText =
+        weatherCodeToText(weather.weathercode);
+
+      handleAlerts(data.alerts);
+    });
+}
+
+function weatherCodeToText(code) {
+  const map = {
+    0: "Clear",
+    1: "Mainly clear",
+    2: "Partly cloudy",
+    3: "Overcast",
+    45: "Fog",
+    48: "Fog",
+    51: "Light drizzle",
+    61: "Rain",
+    63: "Heavy rain",
+    71: "Snow",
+    95: "Thunderstorm"
+  };
+  return map[code] || "Unknown";
+}
+
+function handleAlerts(alerts) {
+  const alertBox = document.getElementById("weather-alert");
+
+  if (!alerts || alerts.length === 0) {
+    alertBox.style.display = "none";
+    return;
+  }
+
+  alertBox.style.display = "block";
+  alertBox.innerText = alerts[0].event;
+}
+
 
 (function startSnow() {
   const canvas = document.getElementById('snow-canvas');
@@ -166,3 +239,80 @@ document.addEventListener('DOMContentLoaded', function() {
   tick();
 })();
 
+document.addEventListener("DOMContentLoaded", () => {
+  getLocation();
+
+  const HOVER_TIME = 3000;
+  const LONG_PRESS_TIME = 2000;
+
+  document.querySelectorAll(".editable-link").forEach(link => {
+    const id = link.dataset.id;
+
+    const saved = localStorage.getItem("vinti_link_" + id);
+    if (saved) {
+      const { name, url } = JSON.parse(saved);
+      link.textContent = name;
+      link.href = url;
+    }
+
+    let hoverTimer = null;
+    let pressTimer = null;
+    let suppressClick = false;
+    let editing = false;
+
+    function openEditor(e) {
+      suppressClick = true;
+      editing = true;
+
+      e?.preventDefault();
+
+      const name = prompt("Edit button name:", link.textContent);
+      if (!name) return reset();
+
+      const url = prompt("Edit link URL:", link.href);
+      if (!url) return reset();
+
+      link.textContent = name;
+      link.href = url;
+
+      localStorage.setItem(
+        "vinti_link_" + id,
+        JSON.stringify({ name, url })
+      );
+
+      reset();
+    }
+
+    function reset() {
+      editing = false;
+      setTimeout(() => suppressClick = false, 50);
+    }
+
+    link.addEventListener("click", e => {
+      if (suppressClick || editing) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+      }
+    });
+
+    link.addEventListener("mouseenter", () => {
+      hoverTimer = setTimeout(() => openEditor(), HOVER_TIME);
+    });
+
+    link.addEventListener("mouseleave", () => {
+      clearTimeout(hoverTimer);
+    });
+
+    link.addEventListener("pointerdown", e => {
+      pressTimer = setTimeout(() => openEditor(e), LONG_PRESS_TIME);
+    });
+
+    link.addEventListener("pointerup", () => {
+      clearTimeout(pressTimer);
+    });
+
+    link.addEventListener("pointerleave", () => {
+      clearTimeout(pressTimer);
+    });
+  });
+});
