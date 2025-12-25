@@ -89,7 +89,8 @@ function acceptCookies() {
 
 setTimeout(showCookieNotice, 1000);
 
-document.cookie = "username=JohnDoe; path=/; 'sessionCookie=value; secure; HttpOnly";
+document.cookie = "username=JohnDoe; path=/; max-age=31536000";
+document.cookie = "sessionCookie=value; path=/; secure; samesite=lax";
 
 document.addEventListener('DOMContentLoaded', function() {
   const showPopup = document.getElementById('showPopup');
@@ -316,3 +317,4 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
