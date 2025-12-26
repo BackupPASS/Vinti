@@ -71,26 +71,38 @@ setTimeout(function() {
   showCookieNotice();
 }, 1000);
 
+function getCookie(name) {
+  const m = document.cookie.match(new RegExp('(?:^|; )' + name.replace(/([.$?*|{}()[\]\\/+^])/g, '\\$1') + '=([^;]*)'));
+  return m ? decodeURIComponent(m[1]) : null;
+}
+
+function setCookie(name, value, maxAgeSeconds) {
+  const secure = location.protocol === 'https:' ? '; Secure' : '';
+  document.cookie =
+    `${encodeURIComponent(name)}=${encodeURIComponent(value)}; Max-Age=${maxAgeSeconds}; Path=/; SameSite=Lax${secure}`;
+}
+
 function hasAcceptedCookies() {
-  return document.cookie.split(';').some((item) => item.trim().startsWith('cookieAccepted='));
+  return getCookie('cookieAccepted') === 'true';
 }
 
 function showCookieNotice() {
-  if (!hasAcceptedCookies()) {
-    document.getElementById('cookie-card').style.display = 'block';
-  }
+  const card = document.getElementById('cookie-card');
+  if (!card) return;
+  card.style.display = hasAcceptedCookies() ? 'none' : 'block';
 }
 
 function acceptCookies() {
-  document.getElementById('cookie-card').style.display = 'none'; 
+  const card = document.getElementById('cookie-card');
+  if (card) card.style.display = 'none';
 
-  document.cookie = 'cookieAccepted=true; max-age=31536000'; 
+  setCookie('cookieAccepted', 'true', 31536000); // 1 year
 }
 
-setTimeout(showCookieNotice, 1000);
 
-document.cookie = "username=JohnDoe; path=/; max-age=31536000";
-document.cookie = "sessionCookie=value; path=/; secure; samesite=lax";
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(showCookieNotice, 1000);
+});
 
 document.addEventListener('DOMContentLoaded', function() {
   const showPopup = document.getElementById('showPopup');
@@ -112,49 +124,37 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-function getLocation() {
-  navigator.geolocation.getCurrentPosition(pos => {
-    const lat = pos.coords.latitude;
-    const lon = pos.coords.longitude;
+document.addEventListener('DOMContentLoaded', () => {
+  const btn = document.getElementById('accept-cookies');
+  if (btn) btn.addEventListener('click', acceptCookies);
+});
 
-    getCity(lat, lon);
-    getWeather(lat, lon);
-  }, () => {
-    document.getElementById("weather-location").innerText = "Location blocked";
-  });
+
+
+function $(id) { return document.getElementById(id); }
+
+function setText(id, text) {
+  const el = $(id);
+  if (el) el.innerText = text;
 }
 
-function getCity(lat, lon) {
-  fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`)
-    .then(res => res.json())
-    .then(data => {
-      const city =
-        data.address.town ||
-        data.address.city ||
-        data.address.village ||
-        data.address.county;
-
-      document.getElementById("weather-location").innerText = city;
-    });
+function setVisible(id, show) {
+  const el = $(id);
+  if (el) el.style.display = show ? "block" : "none";
 }
 
-function getWeather(lat, lon) {
-  fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&alerts=true`)
-    .then(res => res.json())
-    .then(data => {
-      const weather = data.current_weather;
+function fetchWithTimeout(url, ms = 9000, extra = {}) {
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), ms);
 
-      document.getElementById("weather-temp").innerText =
-        `${weather.temperature}°C`;
-
-      document.getElementById("weather-wind").innerText =
-        `Wind: ${weather.windspeed} km/h`;
-
-      document.getElementById("weather-condition").innerText =
-        weatherCodeToText(weather.weathercode);
-
-      handleAlerts(data.alerts);
-    });
+  return fetch(url, {
+    ...extra,
+    signal: ctrl.signal,
+    headers: {
+      "Accept": "application/json",
+      ...(extra.headers || {})
+    }
+  }).finally(() => clearTimeout(t));
 }
 
 function weatherCodeToText(code) {
@@ -166,26 +166,150 @@ function weatherCodeToText(code) {
     45: "Fog",
     48: "Fog",
     51: "Light drizzle",
+    53: "Drizzle",
+    55: "Heavy drizzle",
     61: "Rain",
     63: "Heavy rain",
+    65: "Very heavy rain",
     71: "Snow",
-    95: "Thunderstorm"
+    73: "Snow",
+    75: "Heavy snow",
+    80: "Rain showers",
+    81: "Heavy showers",
+    82: "Violent showers",
+    95: "Thunderstorm",
+    96: "Thunderstorm (hail)",
+    99: "Thunderstorm (heavy hail)"
   };
   return map[code] || "Unknown";
 }
 
 function handleAlerts(alerts) {
-  const alertBox = document.getElementById("weather-alert");
+  const alertBox = $("weather-alert");
+  if (!alertBox) return;
 
-  if (!alerts || alerts.length === 0) {
+  if (!alerts || !Array.isArray(alerts) || alerts.length === 0) {
+    alertBox.innerText = "";
     alertBox.style.display = "none";
     return;
   }
 
   alertBox.style.display = "block";
-  alertBox.innerText = alerts[0].event;
+
+  const a = alerts[0] || {};
+  const title = a.event || a.headline || a.title || "Weather alert";
+  const desc = a.description || a.desc || "";
+
+  alertBox.innerText = desc ? `${title}\n${desc}` : title;
 }
 
+function setWeatherLoading() {
+  setText("weather-location", "Getting location…");
+  setText("weather-temp", "Loading…");
+  setText("weather-wind", "");
+  setText("weather-condition", "");
+  setVisible("weather-alert", false);
+}
+
+function setWeatherUnavailable(reason = "Weather unavailable") {
+  setText("weather-temp", "—");
+  setText("weather-wind", "");
+  setText("weather-condition", reason);
+}
+
+function getLocation() {
+  setWeatherLoading();
+
+  if (!navigator.geolocation) {
+    setText("weather-location", "Geolocation not supported");
+    setWeatherUnavailable("No location");
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      const lat = pos.coords.latitude;
+      const lon = pos.coords.longitude;
+
+      getCity(lat, lon);
+      getWeather(lat, lon);
+    },
+    (err) => {
+      console.warn("Geolocation failed:", err);
+      setText("weather-location", "Location blocked");
+      setWeatherUnavailable("No location");
+      setVisible("weather-alert", false);
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 8000,
+      maximumAge: 60000
+    }
+  );
+}
+
+async function getCity(lat, lon) {
+  setText("weather-location", "Finding area…");
+
+  const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}`;
+
+  try {
+    const res = await fetchWithTimeout(url, 9000);
+    if (!res.ok) throw new Error(`City lookup HTTP ${res.status}`);
+    const data = await res.json();
+
+    const addr = data?.address || {};
+    const city =
+      addr.town ||
+      addr.city ||
+      addr.village ||
+      addr.hamlet ||
+      addr.county ||
+      addr.state ||
+      "Unknown area";
+
+    setText("weather-location", city);
+  } catch (err) {
+    console.error("getCity failed:", err);
+    setText("weather-location", "Area unavailable");
+  }
+}
+
+async function getWeather(lat, lon) {
+  const tempEl = $("weather-temp");
+  const windEl = $("weather-wind");
+  const condEl = $("weather-condition");
+
+  if (tempEl) tempEl.innerText = "Loading…";
+  if (windEl) windEl.innerText = "";
+  if (condEl) condEl.innerText = "";
+
+  const url =
+    `https://api.open-meteo.com/v1/forecast` +
+    `?latitude=${encodeURIComponent(lat)}` +
+    `&longitude=${encodeURIComponent(lon)}` +
+    `&current_weather=true` +
+    `&alerts=true`;
+
+  try {
+    const res = await fetchWithTimeout(url, 9000);
+    if (!res.ok) throw new Error(`Weather HTTP ${res.status}`);
+    const data = await res.json();
+
+    const w = data?.current_weather;
+    if (!w) throw new Error("No current_weather in response");
+
+    setText("weather-temp", `${w.temperature}°C`);
+    setText("weather-wind", `Wind: ${w.windspeed} km/h`);
+    setText("weather-condition", weatherCodeToText(w.weathercode));
+
+    handleAlerts(data.alerts);
+  } catch (err) {
+    console.error("getWeather failed:", err);
+    setWeatherUnavailable(err && err.name === "AbortError" ? "Timed out" : "Failed to load");
+    setVisible("weather-alert", false);
+  }
+}
 
 (function startSnow() {
   const canvas = document.getElementById('snow-canvas');
@@ -235,13 +359,94 @@ function handleAlerts(alerts) {
     }
 
     requestAnimationFrame(tick);
-  }
+  } 
+   getLocation();
 
   tick();
 })();
 
+
+let editTargetLink = null;
+let editTargetId = null;
+
+function normalizeUrl(input) {
+  const v = (input || "").trim();
+  if (!v) return "";
+  if (!/^https?:\/\//i.test(v)) return "https://" + v;
+  return v;
+}
+
+function openEditLinkModal(link, id) {
+  editTargetLink = link;
+  editTargetId = id;
+
+  const overlay = document.getElementById("edit-link-overlay");
+  const nameEl = document.getElementById("edit-link-name");
+  const urlEl  = document.getElementById("edit-link-url");
+
+  if (!overlay || !nameEl || !urlEl) return;
+
+  nameEl.value = link.textContent || "";
+  urlEl.value  = link.href || "";
+
+  overlay.style.display = "flex";
+
+  setTimeout(() => nameEl.focus(), 0);
+}
+
+function closeEditLinkModal() {
+  const overlay = document.getElementById("edit-link-overlay");
+  if (overlay) overlay.style.display = "none";
+  editTargetLink = null;
+  editTargetId = null;
+}
+
+function saveEditLinkModal() {
+  if (!editTargetLink || !editTargetId) return;
+
+  const nameEl = document.getElementById("edit-link-name");
+  const urlEl  = document.getElementById("edit-link-url");
+  if (!nameEl || !urlEl) return;
+
+  const newName = (nameEl.value || "").trim();
+  const newUrl  = normalizeUrl(urlEl.value);
+
+  if (!newName || !newUrl) return; 
+
+  editTargetLink.textContent = newName;
+  editTargetLink.href = newUrl;
+
+  localStorage.setItem(
+    "vinti_link_" + editTargetId,
+    JSON.stringify({ name: newName, url: newUrl })
+  );
+
+  closeEditLinkModal();
+}
+
 document.addEventListener("DOMContentLoaded", () => {
-  getLocation();
+  const overlay = document.getElementById("edit-link-overlay");
+  const btnSave = document.getElementById("edit-link-save");
+  const btnCancel = document.getElementById("edit-link-cancel");
+
+  if (btnSave) btnSave.addEventListener("click", saveEditLinkModal);
+  if (btnCancel) btnCancel.addEventListener("click", closeEditLinkModal);
+
+  // click outside card closes
+  if (overlay) {
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) closeEditLinkModal();
+    });
+  }
+
+  // Escape closes
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeEditLinkModal();
+  });
+});
+
+
+document.addEventListener("DOMContentLoaded", () => {
 
   const HOVER_TIME = 3000;
   const LONG_PRESS_TIME = 2000;
@@ -262,27 +467,21 @@ document.addEventListener("DOMContentLoaded", () => {
     let editing = false;
 
     function openEditor(e) {
-      suppressClick = true;
-      editing = true;
+  suppressClick = true;
+  editing = true;
+  e?.preventDefault();
 
-      e?.preventDefault();
+  openEditLinkModal(link, id);
 
-      const name = prompt("Edit button name:", link.textContent);
-      if (!name) return reset();
+  const overlay = document.getElementById("edit-link-overlay");
+  const release = () => {
+    overlay?.removeEventListener("transitionend", release);
+    editing = false;
+    setTimeout(() => suppressClick = false, 50);
+  };
 
-      const url = prompt("Edit link URL:", link.href);
-      if (!url) return reset();
-
-      link.textContent = name;
-      link.href = url;
-
-      localStorage.setItem(
-        "vinti_link_" + id,
-        JSON.stringify({ name, url })
-      );
-
-      reset();
-    }
+  setTimeout(release, 100);
+}
 
     function reset() {
       editing = false;
@@ -317,4 +516,3 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
-
