@@ -360,8 +360,6 @@ async function getWeather(lat, lon) {
 
     requestAnimationFrame(tick);
   } 
-   getLocation();
-
   tick();
 })();
 
@@ -516,3 +514,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  getLocation();
+});
+
+
