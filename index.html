@@ -10,7 +10,6 @@
     <script src="script.js" defer></script>
 </head>
 <body>
-
   <div id="loading-screen">
     <svg class="pl" width="240" height="240" viewBox="0 0 240 240">
       <circle class="pl__ring pl__ring--a" cx="120" cy="120" r="105" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 660" stroke-dashoffset="-330" stroke-linecap="round"></circle>
@@ -18,11 +17,35 @@
       <circle class="pl__ring pl__ring--c" cx="85" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
       <circle class="pl__ring pl__ring--d" cx="155" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
     </svg>
+</div>
 
+<div id="edit-link-overlay" class="edit-overlay" style="display:none;">
+  <div class="edit-card" role="dialog" aria-modal="true" aria-labelledby="edit-link-title">
+    <span class="title" id="edit-link-title">Edit shortcut</span>
+
+    <p class="description">Change the button name and where it goes.</p>
+
+    <div class="edit-fields">
+      <label class="edit-label">
+        <span>Name</span>
+        <input id="edit-link-name" class="edit-input" type="text" maxlength="30" autocomplete="off">
+      </label>
+
+      <label class="edit-label">
+        <span>Link (URL)</span>
+        <input id="edit-link-url" class="edit-input" type="url" autocomplete="off" placeholder="https://example.com">
+      </label>
+    </div>
+
+    <div class="actions">
+      <button class="btn ghost" id="edit-link-cancel" type="button">Cancel</button>
+      <button class="btn ghost" id="edit-link-save" type="button">Save</button>
+    </div>
+  </div>
 </div>
 
   <div class="headertxt">
-    <center><h1 class="zoom" style="font-family: Albas;">Merry Christmas</h1></center>  
+    <center><h1 class="zoom" style="font-family: Albas;">Vinti</h1></center>  
   </div>
 
 <div class="container">
@@ -62,6 +85,7 @@
   <a href="https://youtube.com" class="btn ghost editable-link" data-id="yt">YouTube</a>
   <a href="https://netflix.com" class="btn ghost editable-link" data-id="nf">Netflix</a>
   <a href="https://facebook.com" class="btn ghost editable-link" data-id="fb">Facebook</a>
+  <a href="https://github.com" class="btn ghost editable-link" data-id="cg">GitHub</a>
   <a href="https://spotify.com" class="btn ghost editable-link" data-id="sp">Spotify</a>
   <a href="https://chat.openai.com" class="btn ghost editable-link" data-id="cg">ChatGPT</a>
 </div>
