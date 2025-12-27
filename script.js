@@ -18,10 +18,18 @@ changeBackground(0);
 
 setInterval(nextBackground, 5000);
 
-document.addEventListener("DOMContentLoaded", function() {
-    setTimeout(function() {
-        document.body.classList.add('loaded');
-    }, .900);
+document.addEventListener("DOMContentLoaded", () => {
+  const MIN_MS = 650;
+  const start = performance.now();
+
+  window.addEventListener("load", () => {
+    const elapsed = performance.now() - start;
+    const remaining = Math.max(0, MIN_MS - elapsed);
+
+    setTimeout(() => {
+      document.body.classList.add("loaded");
+    }, remaining);
+  });
 });
 
 async function checkVintiStatus() {
@@ -96,7 +104,7 @@ function acceptCookies() {
   const card = document.getElementById('cookie-card');
   if (card) card.style.display = 'none';
 
-  setCookie('cookieAccepted', 'true', 31536000); // 1 year
+  setCookie('cookieAccepted', 'true', 31536000); 
 }
 
 
@@ -128,188 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const btn = document.getElementById('accept-cookies');
   if (btn) btn.addEventListener('click', acceptCookies);
 });
-
-
-
 function $(id) { return document.getElementById(id); }
-
-function setText(id, text) {
-  const el = $(id);
-  if (el) el.innerText = text;
-}
-
-function setVisible(id, show) {
-  const el = $(id);
-  if (el) el.style.display = show ? "block" : "none";
-}
-
-function fetchWithTimeout(url, ms = 9000, extra = {}) {
-  const ctrl = new AbortController();
-  const t = setTimeout(() => ctrl.abort(), ms);
-
-  return fetch(url, {
-    ...extra,
-    signal: ctrl.signal,
-    headers: {
-      "Accept": "application/json",
-      ...(extra.headers || {})
-    }
-  }).finally(() => clearTimeout(t));
-}
-
-function weatherCodeToText(code) {
-  const map = {
-    0: "Clear",
-    1: "Mainly clear",
-    2: "Partly cloudy",
-    3: "Overcast",
-    45: "Fog",
-    48: "Fog",
-    51: "Light drizzle",
-    53: "Drizzle",
-    55: "Heavy drizzle",
-    61: "Rain",
-    63: "Heavy rain",
-    65: "Very heavy rain",
-    71: "Snow",
-    73: "Snow",
-    75: "Heavy snow",
-    80: "Rain showers",
-    81: "Heavy showers",
-    82: "Violent showers",
-    95: "Thunderstorm",
-    96: "Thunderstorm (hail)",
-    99: "Thunderstorm (heavy hail)"
-  };
-  return map[code] || "Unknown";
-}
-
-function handleAlerts(alerts) {
-  const alertBox = $("weather-alert");
-  if (!alertBox) return;
-
-  if (!alerts || !Array.isArray(alerts) || alerts.length === 0) {
-    alertBox.innerText = "";
-    alertBox.style.display = "none";
-    return;
-  }
-
-  alertBox.style.display = "block";
-
-  const a = alerts[0] || {};
-  const title = a.event || a.headline || a.title || "Weather alert";
-  const desc = a.description || a.desc || "";
-
-  alertBox.innerText = desc ? `${title}\n${desc}` : title;
-}
-
-function setWeatherLoading() {
-  setText("weather-location", "Getting location…");
-  setText("weather-temp", "Loading…");
-  setText("weather-wind", "");
-  setText("weather-condition", "");
-  setVisible("weather-alert", false);
-}
-
-function setWeatherUnavailable(reason = "Weather unavailable") {
-  setText("weather-temp", "—");
-  setText("weather-wind", "");
-  setText("weather-condition", reason);
-}
-
-function getLocation() {
-  setWeatherLoading();
-
-  if (!navigator.geolocation) {
-    setText("weather-location", "Geolocation not supported");
-    setWeatherUnavailable("No location");
-    return;
-  }
-
-  navigator.geolocation.getCurrentPosition(
-    (pos) => {
-      const lat = pos.coords.latitude;
-      const lon = pos.coords.longitude;
-
-      getCity(lat, lon);
-      getWeather(lat, lon);
-    },
-    (err) => {
-      console.warn("Geolocation failed:", err);
-      setText("weather-location", "Location blocked");
-      setWeatherUnavailable("No location");
-      setVisible("weather-alert", false);
-    },
-    {
-      enableHighAccuracy: true,
-      timeout: 8000,
-      maximumAge: 60000
-    }
-  );
-}
-
-async function getCity(lat, lon) {
-  setText("weather-location", "Finding area…");
-
-  const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}`;
-
-  try {
-    const res = await fetchWithTimeout(url, 9000);
-    if (!res.ok) throw new Error(`City lookup HTTP ${res.status}`);
-    const data = await res.json();
-
-    const addr = data?.address || {};
-    const city =
-      addr.town ||
-      addr.city ||
-      addr.village ||
-      addr.hamlet ||
-      addr.county ||
-      addr.state ||
-      "Unknown area";
-
-    setText("weather-location", city);
-  } catch (err) {
-    console.error("getCity failed:", err);
-    setText("weather-location", "Area unavailable");
-  }
-}
-
-async function getWeather(lat, lon) {
-  const tempEl = $("weather-temp");
-  const windEl = $("weather-wind");
-  const condEl = $("weather-condition");
-
-  if (tempEl) tempEl.innerText = "Loading…";
-  if (windEl) windEl.innerText = "";
-  if (condEl) condEl.innerText = "";
-
-  const url =
-    `https://api.open-meteo.com/v1/forecast` +
-    `?latitude=${encodeURIComponent(lat)}` +
-    `&longitude=${encodeURIComponent(lon)}` +
-    `&current_weather=true` +
-    `&alerts=true`;
-
-  try {
-    const res = await fetchWithTimeout(url, 9000);
-    if (!res.ok) throw new Error(`Weather HTTP ${res.status}`);
-    const data = await res.json();
-
-    const w = data?.current_weather;
-    if (!w) throw new Error("No current_weather in response");
-
-    setText("weather-temp", `${w.temperature}°C`);
-    setText("weather-wind", `Wind: ${w.windspeed} km/h`);
-    setText("weather-condition", weatherCodeToText(w.weathercode));
-
-    handleAlerts(data.alerts);
-  } catch (err) {
-    console.error("getWeather failed:", err);
-    setWeatherUnavailable(err && err.name === "AbortError" ? "Timed out" : "Failed to load");
-    setVisible("weather-alert", false);
-  }
-}
 
 (function startSnow() {
   const canvas = document.getElementById('snow-canvas');
@@ -360,6 +187,7 @@ async function getWeather(lat, lon) {
 
     requestAnimationFrame(tick);
   } 
+
   tick();
 })();
 
@@ -430,14 +258,12 @@ document.addEventListener("DOMContentLoaded", () => {
   if (btnSave) btnSave.addEventListener("click", saveEditLinkModal);
   if (btnCancel) btnCancel.addEventListener("click", closeEditLinkModal);
 
-  // click outside card closes
   if (overlay) {
     overlay.addEventListener("click", (e) => {
       if (e.target === overlay) closeEditLinkModal();
     });
   }
 
-  // Escape closes
   window.addEventListener("keydown", (e) => {
     if (e.key === "Escape") closeEditLinkModal();
   });
@@ -515,8 +341,150 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+function isVintiBrowser() {
+  return /\bVinti\/[^\s]+/i.test(navigator.userAgent || "");
+}
+
 document.addEventListener("DOMContentLoaded", () => {
-  getLocation();
+  const pill = document.getElementById("antimalware-pill");
+  if (!pill) return;
+  pill.style.display = isVintiBrowser() ? "inline-flex" : "none";
 });
 
+(() => {
+  const KEY = "vinti_recent_searches_v1";
+  const MAX = 5;
 
+  function getEls() {
+    const box   = document.getElementById("recent-searches");
+    const list  = document.getElementById("recent-list");
+    const clear = document.getElementById("recent-clear");
+    const title = document.getElementById("recent-title");
+    const input = document.querySelector(".searchbar-input");
+    const form  = document.querySelector("form.searchbar-wrapper");
+    return { box, list, clear, title, input, form };
+  }
+
+  function loadRecent() {
+    try {
+      const raw = localStorage.getItem(KEY);
+      const arr = raw ? JSON.parse(raw) : [];
+      return Array.isArray(arr) ? arr.filter(x => typeof x === "string") : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function saveRecent(arr) {
+    try { localStorage.setItem(KEY, JSON.stringify(arr.slice(0, MAX))); } catch {}
+  }
+
+  function addRecent(term) {
+    const t = (term || "").trim();
+    if (!t) return;
+
+    const arr = loadRecent();
+    const lower = t.toLowerCase();
+
+    const deduped = arr.filter(x => x.toLowerCase() !== lower);
+    deduped.unshift(t);
+
+    saveRecent(deduped.slice(0, MAX));
+  }
+
+  function showBox(box) {
+    if (box) box.hidden = false;
+  }
+
+  function hideBox(box) {
+    if (box) box.hidden = true;
+  }
+
+  function render(filterText) {
+    const { box, list, title } = getEls();
+    if (!box || !list || !title) return;
+
+    const all = loadRecent();
+    const q = (filterText || "").trim().toLowerCase();
+
+    let items = all;
+    if (q) {
+      items = all.filter(s => s.toLowerCase().includes(q));
+      title.textContent = "Matches";
+    } else {
+      title.textContent = "Recent";
+    }
+
+    if (!q) {
+      if (items.length === 0) return hideBox(box);
+      list.innerHTML = "";
+      for (const text of items) list.appendChild(makeItem(text));
+      return showBox(box);
+    } else {
+      if (items.length === 0) return hideBox(box);
+      list.innerHTML = "";
+      for (const text of items) list.appendChild(makeItem(text));
+      return showBox(box);
+    }
+  }
+
+  function makeItem(text) {
+    const row = document.createElement("div");
+    row.className = "recent-item";
+    row.setAttribute("role", "option");
+
+    const left = document.createElement("div");
+    left.className = "recent-text";
+    left.textContent = text;
+
+    const right = document.createElement("div");
+    right.className = "recent-go";
+    right.textContent = "↵";
+
+    row.appendChild(left);
+    row.appendChild(right);
+
+    row.addEventListener("mousedown", (e) => {
+      e.preventDefault();
+      const { input, form, box } = getEls();
+      if (!input) return;
+
+      input.value = text;
+
+      if (form) form.requestSubmit();
+
+    });
+
+    return row;
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const { box, clear, input, form } = getEls();
+    if (!box || !input || !form || !clear) return;
+
+    input.addEventListener("focus", () => render(input.value));
+    input.addEventListener("click", () => render(input.value));
+
+    input.addEventListener("input", () => render(input.value));
+
+    form.addEventListener("submit", () => {
+      addRecent(input.value);
+
+    });
+
+    clear.addEventListener("click", () => {
+      saveRecent([]);
+      hideBox(box);
+    });
+
+    document.addEventListener("mousedown", (e) => {
+      const searchbar = document.querySelector(".searchbar");
+      if (!searchbar) return;
+      if (!searchbar.contains(e.target)) hideBox(box);
+    });
+
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") hideBox(box);
+    });
+  });
+})();
