@@ -80,6 +80,13 @@
                   </button>
               </div>
           </form>
+            <div id="recent-searches" class="recent-searches" role="listbox" aria-label="Recent searches" hidden>
+    <div class="recent-head">
+      <span class="recent-title" id="recent-title">Recent</span>
+      <button id="recent-clear" class="recent-clear" type="button">Clear</button>
+    </div>
+    <div id="recent-list" class="recent-list"></div>
+  </div>
       </div>
 <div class="mainlinks">
   <a href="https://youtube.com" class="btn ghost editable-link" data-id="yt">YouTube</a>
@@ -90,27 +97,6 @@
   <a href="https://chat.openai.com" class="btn ghost editable-link" data-id="cg">ChatGPT</a>
 </div>
 </div>
-
-<div class="info-tiles">
-<div class="tile weather-tile">
-  <h3 id="weather-location">Loading…</h3>
-
-  <div class="temp" id="weather-temp">--°C</div>
-  <div id="weather-condition"></div>
-  <div id="weather-wind"></div>
-
-  <div id="weather-alert" class="alert" style="display:none;"></div>
-</div>
-
-  <!-- <div class="tile">
-    <h3>News</h3>
-    <ul class="news-list">
-      <li>Tech companies push browser privacy</li>
-      <li>AI tools grow in everyday apps</li>
-      <li>UK broadband speeds improve</li>
-    </ul>
-  </div> -->
-  </div> 
 
     <div class="footer">
         <p>© 2025 PlingifyPlug. All rights reserved. | <a href="https://plingifyplug.com/">PlingifyPlug</a> | <a href="https://plingifyplug.com/contact-us">Support</a> | <a href="https://plingifyplug.com/privacy">Privacy Policy</a> | <a href="https://backuppass.github.io/Product-Centre/">Product-Centre</a></p>
@@ -129,5 +115,7 @@
        <div id="background-slideshow"></div>
 
         <canvas id="snow-canvas" aria-hidden="true"></canvas>
+
+        <div id="antimalware-pill" class="antimalware-pill" style="display:none;"> PlingifyPlug AntiMalware </div>
 </body>
 </html>
