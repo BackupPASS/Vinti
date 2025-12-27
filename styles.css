@@ -632,11 +632,12 @@ body {
   .antimalware-pill{
   position: fixed;
   top: 14px;
-  right: 140px; 
+  right: 20px; 
   z-index: 9999;
 
   padding: 10px 14px;
   border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
 
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
