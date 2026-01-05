@@ -142,54 +142,162 @@ function $(id) { return document.getElementById(id); }
   const canvas = document.getElementById('snow-canvas');
   if (!canvas) return;
 
-  const ctx = canvas.getContext('2d');
-  let w = 0, h = 0;
+  if (window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches) return;
+
+  const ctx = canvas.getContext('2d', { alpha: true });
+  let w = 0, h = 0, dpr = 1;
 
   function resize() {
-    const dpr = window.devicePixelRatio || 1;
-    w = canvas.width = Math.floor(window.innerWidth * dpr);
+    dpr = Math.min(2, window.devicePixelRatio || 1); 
+    w = canvas.width  = Math.floor(window.innerWidth * dpr);
     h = canvas.height = Math.floor(window.innerHeight * dpr);
     canvas.style.width = window.innerWidth + 'px';
     canvas.style.height = window.innerHeight + 'px';
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
   }
   resize();
-  window.addEventListener('resize', resize);
+  window.addEventListener('resize', resize, { passive: true });
 
-  const dpr = window.devicePixelRatio || 1;
+  function makeFlakeSprite(px, blurMult = 2.2) {
+    const s = Math.ceil(px * 5);
+    const c = document.createElement('canvas');
+    c.width = c.height = s;
+    const g = c.getContext('2d');
 
-  const flakes = Array.from({ length: 120 }, () => ({
-    x: Math.random() * w,
-    y: Math.random() * h,
-    r: (Math.random() * 2.2 + 0.6) * dpr,
-    s: (Math.random() * 0.9 + 0.35) * dpr, 
-    d: (Math.random() * 1.2 + 0.2) * dpr,  
-    a: Math.random() * Math.PI * 2
-  }));
+    const cx = s / 2, cy = s / 2;
+    const r = px;
 
-  function tick() {
-    ctx.clearRect(0, 0, w, h);
-    ctx.fillStyle = 'rgba(255,255,255,0.95)';
+    const grad = g.createRadialGradient(cx, cy, 0, cx, cy, r * blurMult);
+    grad.addColorStop(0.0, 'rgba(255,255,255,0.95)');
+    grad.addColorStop(0.4, 'rgba(255,255,255,0.55)');
+    grad.addColorStop(0.75, 'rgba(255,255,255,0.18)');
+    grad.addColorStop(1.0, 'rgba(255,255,255,0.0)');
 
-    for (const f of flakes) {
-      f.y += f.s;
-      f.a += 0.01;
-      f.x += Math.sin(f.a) * f.d;
+    g.fillStyle = grad;
+    g.beginPath();
+    g.arc(cx, cy, r * blurMult, 0, Math.PI * 2);
+    g.fill();
 
-      if (f.y > h + 10) { f.y = -10; f.x = Math.random() * w; }
-      if (f.x > w + 10) f.x = -10;
-      if (f.x < -10) f.x = w + 10;
+    return c;
+  }
+  const sprites = [
+    makeFlakeSprite(0.7 * dpr, 2.0), // far
+    makeFlakeSprite(1.2 * dpr, 2.2), // mid
+    makeFlakeSprite(2.0 * dpr, 2.7), // near
+  ];
+  const LAYERS = [
+    { count: 55, baseSpeed: 0.55, baseDrift: 0.35, baseAlpha: 0.28, sprite: 0 }, // far
+    { count: 45, baseSpeed: 0.95, baseDrift: 0.70, baseAlpha: 0.50, sprite: 1 }, // mid
+    { count: 25, baseSpeed: 1.55, baseDrift: 1.15, baseAlpha: 0.72, sprite: 2 }, // near
+  ];
 
-      ctx.beginPath();
-      ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
-      ctx.fill();
+  const flakes = [];
+  for (let li = 0; li < LAYERS.length; li++) {
+    const L = LAYERS[li];
+    for (let i = 0; i < L.count; i++) {
+
+      const sizeVar = (Math.random() * 0.45 + 0.80);
+      const speedVar = (Math.random() * 0.55 + 0.75);
+      const driftVar = (Math.random() * 0.60 + 0.70);
+
+      flakes.push({
+        layer: li,
+        x: Math.random() * w,
+        y: Math.random() * h,
+
+        vy: L.baseSpeed * speedVar * dpr,
+        vyJitter: (Math.random() * 0.25 + 0.05) * dpr,
+
+        phase: Math.random() * Math.PI * 2,
+        wobble: L.baseDrift * driftVar * dpr,
+        spin: (Math.random() * 0.020 + 0.010),
+
+        tumble: Math.random() * 1.0 + 0.3,
+
+        alpha: Math.min(1, L.baseAlpha + Math.random() * 0.18),
+
+        scale: sizeVar,
+      });
+    }
+  }
+
+  const MAX_FPS = 45;
+  const frameMS = 1000 / MAX_FPS;
+
+  let last = performance.now();
+  let acc = 0;
+
+  let wind = 0;
+  let windTarget = 0;
+  let windTimer = 0;
+
+  function tick(now) {
+    const dt = now - last;
+    last = now;
+    acc += dt;
+
+    windTimer += dt;
+    if (windTimer > 900) {
+      windTimer = 0;
+      windTarget = (Math.random() * 2 - 1) * 0.75 * dpr; 
+    }
+ 
+    wind += (windTarget - wind) * 0.012;
+
+    if (acc >= frameMS) {
+      acc = acc % frameMS;
+
+      ctx.clearRect(0, 0, w, h);
+
+      for (let li = 0; li < LAYERS.length; li++) {
+        const L = LAYERS[li];
+        const img = sprites[L.sprite];
+
+        for (let i = 0; i < flakes.length; i++) {
+          const f = flakes[i];
+          if (f.layer !== li) continue;
+
+          f.phase += f.spin * (0.8 + f.tumble * 0.4);
+
+          const flutter = Math.sin(f.phase * 0.9) * f.vyJitter;
+          const drift = Math.sin(f.phase) * (0.35 * f.wobble);
+
+          const windInfluence = (0.55 + li * 0.35);
+          f.x += (wind * windInfluence) + drift;
+
+          f.y += f.vy + flutter;
+
+          // wrap
+          if (f.y > h + 60) { f.y = -60; f.x = Math.random() * w; }
+          if (f.x > w + 60) f.x = -60;
+          if (f.x < -60) f.x = w + 60;
+
+          ctx.globalAlpha = f.alpha;
+
+          const iw = img.width * f.scale;
+          const ih = img.height * f.scale;
+          ctx.drawImage(img, f.x - iw / 2, f.y - ih / 2, iw, ih);
+
+          if (li === 2 && (f.vy + flutter) > 2.1 * dpr && Math.random() < 0.015) {
+            ctx.globalAlpha = f.alpha * 0.35;
+            ctx.beginPath();
+            ctx.moveTo(f.x, f.y);
+            ctx.lineTo(f.x - (wind * 2.2), f.y - (f.vy * 3.2));
+            ctx.strokeStyle = 'rgba(255,255,255,0.35)';
+            ctx.lineWidth = 1 * dpr;
+            ctx.stroke();
+          }
+        }
+      }
+
+      ctx.globalAlpha = 1;
     }
 
     requestAnimationFrame(tick);
-  } 
+  }
 
-  tick();
+  requestAnimationFrame(tick);
 })();
+
 
 
 let editTargetLink = null;
