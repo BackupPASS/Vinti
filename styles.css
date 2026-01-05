@@ -26,6 +26,18 @@ body {
     padding-left: env(safe-area-inset-left);
     padding-right: env(safe-area-inset-right)
   }
+
+  body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:9996; /* under snow (9997) */
+  background: radial-gradient(circle at center,
+    transparent 55%,
+    rgba(255,255,255,0.06) 72%,
+    rgba(0,0,0,0.18) 100%);
+}
   
 
   @media (prefers-color-scheme: dark) {
