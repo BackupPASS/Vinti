@@ -458,3 +458,4 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!pill) return;
   pill.style.display = isVintiBrowser() ? "inline-flex" : "none";
 });
+
