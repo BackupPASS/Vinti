@@ -769,6 +769,7 @@ body {
       z-index: 9997;
       pointer-events: none;
       opacity: 0.75;
+      display: none !important;
     }
 
         .info-tiles {
@@ -1070,3 +1071,4 @@ body {
     border-radius: 18px;
   }
 }
+
