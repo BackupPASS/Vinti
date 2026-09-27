@@ -45,28 +45,6 @@ body {
       linear-gradient(180deg, rgba(10,12,18,.45), rgba(10,12,18,.8));
       pointer-events:none;
     }
-
-  @media (prefers-color-scheme: dark) {
-    body {
-      background-color: #121212; 
-      color: #fff;
-    }
-  
-    .footer {
-      background-color: rgba(50, 50, 50, 0.5); 
-      color: #fff;
-    }
-  
-    .btn {
-      color: #ddd;
-    }
-  
-    .searchbar-input {
-      color: #fff; 
-    }
-  }
-  
-
   
   @font-face {
     font-family: 'Alba';
@@ -165,32 +143,17 @@ body {
     text-align: center;
     margin-top: 20px;
   }
-  
- .footer {
-  color: #fff;
-  text-align: center;
-  padding: 8px 0; 
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  border-radius: 35px 35px 0 0;
-  overflow: hidden;
 
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: saturate(180%) blur(30px);
-  -webkit-backdrop-filter: saturate(180%) blur(30px);
-
-  box-shadow:
-    0 8px 32px 0 rgba(31, 38, 135, 0.37),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.18);
-
-  transition: background-color 0.3s ease;
-}
-
-.footer a {
-  color: #fff;
-  text-decoration: none;
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-right: 6px;
+  border: 2px solid rgba(255,255,255,.25);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  vertical-align: middle;
 }
 
   .searchbar {
@@ -961,21 +924,6 @@ body {
     text-align: center;
   }
 
-  .footer {
-    padding: 14px 12px;
-  }
-
-  .footer p {
-    font-size: 12px;
-    line-height: 1.35;
-    text-align: center;
-  }
-
-  .footer a {
-    display: inline-block;
-    padding: 2px 0;
-  }
-
   .cookie-card {
     position: fixed;
     left: 12px;
@@ -1060,3 +1008,42 @@ body {
     border-radius: 18px;
   }
 }
+
+    .footer {
+  color: #fff;
+  text-align: center;
+  padding: 8px 0; 
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  border-radius: 35px 35px 0 0;
+  overflow: hidden;
+
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: saturate(180%) blur(30px);
+  -webkit-backdrop-filter: saturate(180%) blur(30px);
+
+  box-shadow:
+    0 8px 32px 0 rgba(31, 38, 135, 0.37),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+
+  transition: background-color 0.3s ease;
+}
+
+.footer a {
+  color: #fff;
+  text-decoration: none;
+}
+
+    @media(max-width:700px){
+      .wrap{
+        padding:16px 10px 70px;
+      }
+      .panel{
+        padding:14px;
+      }
+      .footer{
+        font-size:11px;
+      }
+    }
