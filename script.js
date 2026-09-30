@@ -18,20 +18,6 @@ changeBackground(0);
 
 setInterval(nextBackground, 5000);
 
-document.addEventListener("DOMContentLoaded", () => {
-  const MIN_MS = 650;
-  const start = performance.now();
-
-  window.addEventListener("load", () => {
-    const elapsed = performance.now() - start;
-    const remaining = Math.max(0, MIN_MS - elapsed);
-
-    setTimeout(() => {
-      document.body.classList.add("loaded");
-    }, remaining);
-  });
-});
-
 async function checkVintiStatus() {
   try {
     const res = await fetch("https://backuppass.github.io/Status-Centre/");
